@@ -4,6 +4,8 @@
 
 ## Running tests
 
+Live tests against a real environment are defined by label in [Testing_Live-Test-Definitions.md](Testing_Live-Test-Definitions.md).
+
 ## Component test matrix
 
 | Component | Test file | Coverage |
