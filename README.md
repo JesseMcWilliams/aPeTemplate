@@ -50,11 +50,14 @@ Then open the project folder in VS Code, start Claude Code, and ask it to *"run 
 
 ## The skill
 
-The skill lives outside this repo, at `%USERPROFILE%\.claude\skills\ape-project-setup\SKILL.md`, because it's a personal Claude Code skill that's available in every project. It's copied here as `skill/SKILL.md` so it's version-controlled. After editing either copy, update the other:
+Claude Code loads the skill from `%USERPROFILE%\.claude\skills\ape-project-setup\`, because it's a personal skill that's available in every project. The source is `skill/SKILL.md` in this repo. Run this once per host, from wherever you cloned the repo:
 
 ```powershell
-Copy-Item .\skill\SKILL.md "$env:USERPROFILE\.claude\skills\ape-project-setup\SKILL.md"
+.\Install-Skill.ps1 -WhatIf   # preview
+.\Install-Skill.ps1
 ```
+
+This makes the skill folder a directory junction to this repo's `skill\` folder, so there's only one copy and a `git pull` updates the installed skill. An older copied install is moved to `%USERPROFILE%\.claude\skill-backups\`. Use `-Force` to repoint a junction that goes to another clone. Start a new Claude Code session afterwards. The skill finds this repo from the junction target, so the clone doesn't have to be at `C:\Code\aPeTemplate`.
 
 ## Why a script and a skill
 
