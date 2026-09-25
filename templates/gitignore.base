@@ -1,0 +1,19 @@
+# Local lab/test environment details referenced by CLAUDE.md - not for the repo
+*.local.md
+
+# Log and runtime output
+*.log
+*.csv
+
+# Secrets (Export-Clixml credential files, API key files, etc.)
+*.cred
+*.clixml
+Secrets/
+
+# Test results
+TestResults.xml
+
+# Editor/OS cruft
+.vscode/
+Thumbs.db
+desktop.ini
