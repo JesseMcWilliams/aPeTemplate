@@ -59,6 +59,17 @@ Claude Code loads the skill from `%USERPROFILE%\.claude\skills\ape-project-setup
 
 This makes the skill folder a directory junction to this repo's `skill\` folder, so there's only one copy and a `git pull` updates the installed skill. An older copied install is moved to `%USERPROFILE%\.claude\skill-backups\`. Use `-Force` to repoint a junction that goes to another clone. Start a new Claude Code session afterwards. The skill finds this repo from the junction target, so the clone doesn't have to be at `C:\Code\aPeTemplate`.
 
+## User-level CLAUDE.md
+
+`user-claude/CLAUDE.md` holds personal Claude Code preferences that apply in every project, such as how replies are formatted. Claude Code reads it from `%USERPROFILE%\.claude\CLAUDE.md`. Run this once per host from an elevated PowerShell (or turn on Windows Developer Mode first), because Windows needs one of those to create a file symbolic link:
+
+```powershell
+.\Install-UserClaudeMd.ps1 -WhatIf   # preview
+.\Install-UserClaudeMd.ps1
+```
+
+This makes `%USERPROFILE%\.claude\CLAUDE.md` a symbolic link to the repo file, so a `git pull` updates every host. An existing real file is moved to `%USERPROFILE%\.claude\claude-md-backups\` first. Use `-Force` to repoint a link that goes to another clone. Edit the repo copy, then start a new Claude Code session.
+
 ## Why a script and a skill
 
 The script does everything that's the same every time (copying, merging, `git init`) and uses no tokens. The skill does only what needs judgment, which is reading the code to fill in `CLAUDE.md`. See `Token-Usage-Recommendations.md` in aPePAS (R4) for the reasoning behind the CLAUDE.md layout.
