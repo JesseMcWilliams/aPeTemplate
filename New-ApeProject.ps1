@@ -2,8 +2,8 @@
 <#
 .SYNOPSIS
     Scaffolds a new aPe* project, or retrofits an existing one, with the standard
-    Claude Code setup: CLAUDE.md, Live-Testing.local.md, .gitignore entries and
-    (optionally) skeleton docs.
+    Claude Code setup: CLAUDE.md, README.md (overview), Live-Testing.local.md,
+    .gitignore entries and (optionally) skeleton Claude_Docs\ files.
 
 .DESCRIPTION
     Never overwrites an existing file. Existing .gitignore files are merged: only
@@ -19,13 +19,13 @@
 
 .PARAMETER Existing
     Retrofit an existing project folder instead of creating a new one.
-    Skeleton docs are skipped unless -IncludeDocs is also given.
+    Skeleton Claude_Docs\ files are skipped unless -IncludeDocs is also given.
 
 .PARAMETER Description
     One-line project description placed in CLAUDE.md.
 
 .PARAMETER IncludeDocs
-    Copy the skeleton Docs\ files (the default for new projects). Existing
+    Copy the skeleton Claude_Docs\ files (the default for new projects). Existing
     docs are never overwritten.
 
 .EXAMPLE
@@ -118,7 +118,8 @@ if (-not $targetExists) {
     Add-Result '.' 'created'
 }
 if (-not $Existing) {
-    foreach ($sub in @('Docs', 'Modules', 'Tests\Unit')) {
+    # User_Docs\ is not created here: user docs are written near the end of a project.
+    foreach ($sub in @('Claude_Docs', 'Modules', 'Tests\Unit')) {
         $subPath = Join-Path $target $sub
         if (-not (Test-Path -LiteralPath $subPath)) {
             if ($PSCmdlet.ShouldProcess($subPath, 'Create folder')) {
@@ -135,10 +136,11 @@ if (-not $Existing) {
 
 Copy-TemplateFile (Join-Path $templateRoot 'CLAUDE.template.md')             (Join-Path $target 'CLAUDE.md')
 Copy-TemplateFile (Join-Path $templateRoot 'Live-Testing.local.template.md') (Join-Path $target 'Live-Testing.local.md')
+Copy-TemplateFile (Join-Path $templateRoot 'README.template.md')             (Join-Path $target 'README.md')
 
 if ($copyDocs) {
-    foreach ($doc in Get-ChildItem -LiteralPath (Join-Path $templateRoot 'Docs') -File) {
-        Copy-TemplateFile $doc.FullName (Join-Path (Join-Path $target 'Docs') $doc.Name)
+    foreach ($doc in Get-ChildItem -LiteralPath (Join-Path $templateRoot 'Claude_Docs') -File) {
+        Copy-TemplateFile $doc.FullName (Join-Path (Join-Path $target 'Claude_Docs') $doc.Name)
     }
 }
 
@@ -197,6 +199,10 @@ if (-not (Test-Path -LiteralPath (Join-Path $target '.git'))) {
 #endregion
 
 $results | Format-Table -AutoSize | Out-String | Write-Host
+
+if (Test-Path -LiteralPath (Join-Path $target 'Docs')) {
+    Write-Host "Legacy Docs\ folder found. Ask the ape-project-setup skill to migrate it to Claude_Docs\ and User_Docs\."
+}
 
 if (Test-Path -LiteralPath (Join-Path $target 'CLAUDE.md')) {
     $fillCount = @(Select-String -LiteralPath (Join-Path $target 'CLAUDE.md') -Pattern '<!-- FILL:' -SimpleMatch).Count
