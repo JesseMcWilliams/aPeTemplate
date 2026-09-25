@@ -7,15 +7,23 @@ description: Set up or retrofit an aPe* project (aPePAS, aPeDiscovery, aPeSecret
 
 The deterministic work (folders, file copies, .gitignore merge, git init) is done by a script. Your job is only the part that needs judgment: filling in CLAUDE.md from the actual code, and classifying docs during a migration. Keep token use low.
 
-The doc layout rules live in the "Documentation layout" section of `C:\Code\aPeTemplate\templates\CLAUDE.template.md`. Follow that section; it isn't repeated here.
+**Find the template repo first (`<TemplateRoot>` below).** This skill is installed as a junction into the aPeTemplate clone (`Install-Skill.ps1`), so the clone is the parent of the junction target. It can be in a different place on each host:
+
+```
+powershell.exe -NoProfile -Command "Split-Path (@((Get-Item \"$env:USERPROFILE\.claude\skills\ape-project-setup\").Target)[0])"
+```
+
+If that prints nothing (the skill is a plain copy, not a junction), use `C:\Code\aPeTemplate` if it exists, otherwise ask the user.
+
+The doc layout rules live in the "Documentation layout" section of `<TemplateRoot>\templates\CLAUDE.template.md`. Follow that section; it isn't repeated here.
 
 ## 1. Run the scaffold script
 
-Work out the project name and parent folder (default `C:\Code`) from the user's request or the current working directory. Use `-Existing` if the folder already has content. Preview first, then run:
+Work out the project name and parent folder (default: the folder that contains `<TemplateRoot>`) from the user's request or the current working directory. Pass `-Path <parent>` when it's different. Use `-Existing` if the folder already has content. Preview first, then run:
 
 ```
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Code\aPeTemplate\New-ApeProject.ps1 -Name <Name> [-Existing] [-Description '<one line>'] -WhatIf
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Code\aPeTemplate\New-ApeProject.ps1 -Name <Name> [-Existing] [-Description '<one line>']
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File <TemplateRoot>\New-ApeProject.ps1 -Name <Name> [-Existing] [-Description '<one line>'] -WhatIf
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File <TemplateRoot>\New-ApeProject.ps1 -Name <Name> [-Existing] [-Description '<one line>']
 ```
 
 The script never overwrites files. If `CLAUDE.md` already exists and has no `<!-- FILL:` markers, don't rewrite it. Instead, add the template's "Documentation layout" section if it's missing, and tell the user.
