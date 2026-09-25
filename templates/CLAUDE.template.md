@@ -24,6 +24,7 @@
   - `Reference_`: rules that apply at every stage (lessons learned, conventions, interface contracts).
   - `Archive_<OriginalStage>_<Topic>.md`: finished or superseded material. **Don't read `Archive_*` unless the user asks or the task needs history.**
 - `User_Docs/`: end-user documentation, usually written near the end of the project from `Claude_Docs/Planning_User-Docs-Backlog.md`. It's output, not a source of facts. Take facts from the code and `Claude_Docs/`.
+- `Published_Docs/`: `.docx` deliverables for end users (for example installation guides), refreshed from `User_Docs/` and `Claude_Docs/` when a release is created. Don't read them for facts, and don't edit them between releases.
 - When you make a user-visible change, add one line for it to `Planning_User-Docs-Backlog.md`.
 - Keep each doc to about 500 lines. Past that, move closed or old content into an `Archive_` file. Don't keep revision logs, because git has the history. Put dates in file names only for point-in-time snapshots, such as reviews.
 - Rename docs with `git mv`, and update every link to them in the same change.

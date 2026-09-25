@@ -14,7 +14,7 @@
 ```
 
 ## Documentation
-- **Using it:** [User_Docs/](User_Docs/). User guides are written near the end of the project.
+- **Using it:** [User_Docs/](User_Docs/). User guides are written near the end of the project. Released `.docx` guides are in [Published_Docs/](Published_Docs/).
 - **How it works:** [Claude_Docs/Design_Architecture.md](Claude_Docs/Design_Architecture.md)
 - **Testing:** [Claude_Docs/Testing_Plan.md](Claude_Docs/Testing_Plan.md)
 - **Conventions and gotchas:** [Claude_Docs/Reference_Lessons-Learned.md](Claude_Docs/Reference_Lessons-Learned.md)

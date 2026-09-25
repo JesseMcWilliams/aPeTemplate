@@ -118,7 +118,8 @@ if (-not $targetExists) {
     Add-Result '.' 'created'
 }
 if (-not $Existing) {
-    # User_Docs\ is not created here: user docs are written near the end of a project.
+    # User_Docs\ and Published_Docs\ are not created here: user docs are written near
+    # the end of a project, and Published_Docs\ (.docx) when a release is created.
     foreach ($sub in @('Claude_Docs', 'Modules', 'Tests\Unit')) {
         $subPath = Join-Path $target $sub
         if (-not (Test-Path -LiteralPath $subPath)) {

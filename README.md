@@ -21,6 +21,7 @@ The script never overwrites an existing file, so it's safe to run again.
 | `README.md` | Overview only. It links to the docs below rather than repeating them. |
 | `Claude_Docs/` | Every doc Claude creates or works from, named `<Stage>_<Topic-With-Hyphens>.md`. |
 | `User_Docs/` | End-user documentation, usually written near the end of a project from `Claude_Docs/Planning_User-Docs-Backlog.md`. The script doesn't create this folder. |
+| `Published_Docs/` | `.docx` deliverables for end users, refreshed from `User_Docs/` and `Claude_Docs/` when a release is created. The script doesn't create this folder. |
 
 | Stage prefix | Use for | When the work is done |
 |---|---|---|
