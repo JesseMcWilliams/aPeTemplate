@@ -40,7 +40,7 @@ param(
     [ValidatePattern('^[A-Za-z0-9._-]+$')]
     [string]$Name,
 
-    [string]$Path = (Split-Path -Parent $PSScriptRoot),
+    [string]$Path = '',
 
     [switch]$Existing,
 
@@ -51,6 +51,9 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+# PS 5.1 leaves $PSScriptRoot empty inside param() defaults, so resolve it here.
+if (-not $Path) { $Path = Split-Path -Parent $PSScriptRoot }
 
 $templateRoot = Join-Path $PSScriptRoot 'templates'
 $target       = Join-Path $Path $Name
