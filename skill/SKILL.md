@@ -56,6 +56,7 @@ Show the user the filled CLAUDE.md, with a one-line note on anything you left as
    - proposals that aren't started, or aren't confirmed finished → `Planning_`
    - conventions, lessons learned, interface contracts → `Reference_`
    - guides written for end users → `User_Docs/`
+   - `.docx` deliverables for end users (installation or setup guides) → `Published_Docs/`, keeping the file name
    - lab details (hosts, App IDs, safes, objects) → out of tracked docs and into `Live-Testing.local.md`
 2. **Show the mapping table**, marking the rows you're unsure about, and get approval before moving anything.
 3. **Move the files** with `git mv` on a `YYYY-MM-DD-<topic>` branch. Split out oversized sections (revision logs, closed findings) into `Archive_` files with a script. Don't read them into context.
