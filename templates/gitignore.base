@@ -10,6 +10,11 @@
 *.clixml
 Secrets/
 
+# Per-user Claude Code settings and the New-ClaudeTokenSettings.ps1 proposal and backups
+.claude/settings.local.json
+.claude/settings.local.json.bak-*
+.claude/settings.token-proposal.json
+
 # Test results
 TestResults.xml
 
