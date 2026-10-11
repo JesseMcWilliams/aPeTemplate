@@ -4,3 +4,6 @@ These apply in every project on every host. The source is `user-claude/CLAUDE.md
 
 ## Communication
 - Present actions (taken or proposed), open items, options and questions as **numbered lists**, so I can answer by number. Keep the numbers stable within a thread, and when I reply using numbers, keep using mine.
+
+## Git
+- When I ask you to merge a PR, delete its branch in the same step: `gh pr merge <n> --merge --delete-branch`. If the branch delete is refused, say so and give me the command; don't try another way around it.
