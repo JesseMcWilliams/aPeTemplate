@@ -10,7 +10,7 @@ This repo scaffolds new aPe* projects, and retrofits existing ones, with a stand
 | `Live-Testing.local.md` | Lab details (URLs, tenants, App IDs, test fixtures). Gitignored, and read only when a task involves live testing. Never put secrets in it. |
 | `.gitignore` | The base entries (`*.local.md`, logs, CSVs, credential files). An existing `.gitignore` is merged: missing entries are appended. |
 | `README.md` | An overview-only README (purpose, requirements, quick start, links to the docs). It's created only if the project doesn't have one. |
-| `Claude_Docs/` (new projects) | Skeleton `Design_Architecture.md`, `Testing_Plan.md`, `Reference_Lessons-Learned.md` and `Planning_User-Docs-Backlog.md`, set up so they don't grow revision logs. |
+| `Claude_Docs/` (new projects) | Skeleton `Design_Architecture.md`, `Testing_Plan.md`, `Testing_Live-Test-Definitions.md`, `Reference_Lessons-Learned.md` and `Planning_User-Docs-Backlog.md`, set up so they don't grow revision logs. The live test definitions use `{Placeholder}` values only; `Live-Testing.local.md` fills them in per environment. |
 
 The script never overwrites an existing file, so it's safe to run again.
 

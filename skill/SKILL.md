@@ -58,6 +58,7 @@ Show the user the filled CLAUDE.md, with a one-line note on anything you left as
    - guides written for end users → `User_Docs/`
    - `.docx` deliverables for end users (installation or setup guides) → `Published_Docs/`, keeping the file name
    - lab details (hosts, App IDs, safes, objects) → out of tracked docs and into `Live-Testing.local.md`
+   - repeatable live test procedures → labeled `LT-*` tests in `Claude_Docs/Testing_Live-Test-Definitions.md`, with lab values replaced by `{Placeholder}`s whose values go in `Live-Testing.local.md`
 2. **Show the mapping table**, marking the rows you're unsure about, and get approval before moving anything.
 3. **Move the files** with `git mv` on a `YYYY-MM-DD-<topic>` branch. Split out oversized sections (revision logs, closed findings) into `Archive_` files with a script. Don't read them into context.
 4. **Update every link** to a moved doc (README, CLAUDE.md, other docs, code comments) with a scripted old→new replacement across the tracked text files. Then grep for any leftover `Docs/` or `Docs\` references.
