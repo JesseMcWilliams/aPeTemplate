@@ -3,11 +3,13 @@
 .SYNOPSIS
     Scaffolds a new aPe* project, or retrofits an existing one, with the standard
     Claude Code setup: CLAUDE.md, README.md (overview), Live-Testing.local.md,
-    .gitignore entries and (optionally) skeleton Claude_Docs\ files.
+    .gitignore entries, Tools\ helper scripts and (optionally) skeleton
+    Claude_Docs\ files.
 
 .DESCRIPTION
     Never overwrites an existing file. Existing .gitignore files are merged: only
-    missing entries are appended. CLAUDE.md is written from the template with
+    missing entries are appended. Tools\ scripts are copied byte for byte (they
+    keep their UTF-8 BOM). CLAUDE.md is written from the template with
     <!-- FILL: ... --> markers; the ape-project-setup Claude Code skill (or you)
     fills those in from the real code.
 
@@ -143,6 +145,25 @@ if ($copyDocs) {
     foreach ($doc in Get-ChildItem -LiteralPath (Join-Path $templateRoot 'Claude_Docs') -File) {
         Copy-TemplateFile $doc.FullName (Join-Path (Join-Path $target 'Claude_Docs') $doc.Name)
     }
+}
+
+# Tools\ scripts are copied as-is, not expanded: Copy-TemplateFile writes without a BOM,
+# and .ps1 files must keep theirs. Retrofits get them too.
+foreach ($tool in Get-ChildItem -LiteralPath (Join-Path $templateRoot 'Tools') -File) {
+    $toolDest = Join-Path (Join-Path $target 'Tools') $tool.Name
+    $relative = 'Tools\' + $tool.Name
+    if (Test-Path -LiteralPath $toolDest) {
+        Add-Result $relative 'skipped (already exists)'
+        continue
+    }
+    if ($PSCmdlet.ShouldProcess($toolDest, 'Copy helper script')) {
+        $toolDir = Split-Path -Parent $toolDest
+        if (-not (Test-Path -LiteralPath $toolDir)) {
+            New-Item -ItemType Directory -Path $toolDir -Force | Out-Null
+        }
+        Copy-Item -LiteralPath $tool.FullName -Destination $toolDest
+    }
+    Add-Result $relative 'created'
 }
 
 #endregion

@@ -26,7 +26,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File <TemplateRoot>\New-ApePr
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File <TemplateRoot>\New-ApeProject.ps1 -Name <Name> [-Existing] [-Description '<one line>']
 ```
 
-The script never overwrites files. If `CLAUDE.md` already exists and has no `<!-- FILL:` markers, don't rewrite it. Instead, add the template's "Documentation layout" section if it's missing, and tell the user.
+The script never overwrites files. If `CLAUDE.md` already exists and has no `<!-- FILL:` markers, don't rewrite it. Instead, add any of the template's "Documentation layout", "File tools" and "Session habits" sections that are missing (or the template lines missing from them), and tell the user. If the project already has its own `Tools/` scripts with the same names, the script skips them; mention any differences rather than replacing them.
 
 ## 2. Gather facts cheaply
 
@@ -43,7 +43,7 @@ Replace each `<!-- FILL: ... -->` marker in CLAUDE.md, following its instruction
 - **Hard limit of about 90 lines.** CLAUDE.md is loaded on every call.
 - Include only facts you confirmed in step 2. If you can't confirm something (e.g. a test command), leave a `<!-- TODO: ... -->` rather than guessing.
 - Point to the doc and section that holds the detail rather than copying it.
-- Keep the template's generic sections (Documentation layout, Git, Live testing) unless the repo contradicts them.
+- Keep the template's generic sections (Documentation layout, File tools, Session habits, Git, Live testing) unless the repo contradicts them.
 - Never put hostnames, tenants, App IDs, safe or object names, or credentials in CLAUDE.md. Those belong in the gitignored `Live-Testing.local.md`, and secrets belong in neither file. For a placeholder password, use `ThisIsMy_FAKE_Password6!`.
 
 Show the user the filled CLAUDE.md, with a one-line note on anything you left as TODO, and write it only after they approve.
@@ -58,6 +58,7 @@ Show the user the filled CLAUDE.md, with a one-line note on anything you left as
    - guides written for end users → `User_Docs/`
    - `.docx` deliverables for end users (installation or setup guides) → `Published_Docs/`, keeping the file name
    - lab details (hosts, App IDs, safes, objects) → out of tracked docs and into `Live-Testing.local.md`
+   - repeatable live test procedures → labeled `LT-*` tests in `Claude_Docs/Testing_Live-Test-Definitions.md`, with lab values replaced by `{Placeholder}`s whose values go in `Live-Testing.local.md`
 2. **Show the mapping table**, marking the rows you're unsure about, and get approval before moving anything.
 3. **Move the files** with `git mv` on a `YYYY-MM-DD-<topic>` branch. Split out oversized sections (revision logs, closed findings) into `Archive_` files with a script. Don't read them into context.
 4. **Update every link** to a moved doc (README, CLAUDE.md, other docs, code comments) with a scripted old→new replacement across the tracked text files. Then grep for any leftover `Docs/` or `Docs\` references.

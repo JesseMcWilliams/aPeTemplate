@@ -10,7 +10,8 @@ This repo scaffolds new aPe* projects, and retrofits existing ones, with a stand
 | `Live-Testing.local.md` | Lab details (URLs, tenants, App IDs, test fixtures). Gitignored, and read only when a task involves live testing. Never put secrets in it. |
 | `.gitignore` | The base entries (`*.local.md`, logs, CSVs, credential files). An existing `.gitignore` is merged: missing entries are appended. |
 | `README.md` | An overview-only README (purpose, requirements, quick start, links to the docs). It's created only if the project doesn't have one. |
-| `Claude_Docs/` (new projects) | Skeleton `Design_Architecture.md`, `Testing_Plan.md`, `Reference_Lessons-Learned.md` and `Planning_User-Docs-Backlog.md`, set up so they don't grow revision logs. |
+| `Tools/` | Helper scripts Claude uses instead of writing one-off scripts each session: `Repair-FileEncoding.ps1` (CRLF, BOM on PowerShell files), `Test-FileHygiene.ps1` (parse, BOM and CRLF check before a commit) and `Edit-DocByAnchor.ps1` (exact-anchor edits to long docs). Copied byte for byte, including on a retrofit. |
+| `Claude_Docs/` (new projects) | Skeleton `Design_Architecture.md`, `Testing_Plan.md`, `Testing_Live-Test-Definitions.md`, `Reference_Lessons-Learned.md` and `Planning_User-Docs-Backlog.md`, set up so they don't grow revision logs. The live test definitions use `{Placeholder}` values only; `Live-Testing.local.md` fills them in per environment. |
 
 The script never overwrites an existing file, so it's safe to run again.
 
@@ -71,9 +72,23 @@ This makes the skill folder a directory junction to this repo's `skill\` folder,
 
 This makes `%USERPROFILE%\.claude\CLAUDE.md` a symbolic link to the repo file, so a `git pull` updates every host. An existing real file is moved to `%USERPROFILE%\.claude\claude-md-backups\` first. Use `-Force` to repoint a link that goes to another clone. Edit the repo copy, then start a new Claude Code session.
 
+## Turning off unused plugins and connectors
+
+Every enabled plugin and claude.ai connector adds its skills or tools to each session. `New-ClaudeTokenSettings.ps1` checks a project's past sessions for the ones that were never used and proposes turning them off for that project only:
+
+```powershell
+.\New-ClaudeTokenSettings.ps1 -ProjectPath C:\Code\aPePAS                  # report + .claude\settings.token-proposal.json
+.\New-ClaudeTokenSettings.ps1 -ProjectPath C:\Code\aPePAS -Keep pdf-viewer -Apply   # merge into .claude\settings.local.json
+```
+
+- **What it reads:** the project's session transcripts in `%USERPROFILE%\.claude\projects\`, the claude.ai synced plugin list and, if present, `installed_plugins.json`. Claude Code documents the transcript format as internal, so anything the script can't parse is reported and skipped.
+- **What it writes:** `enabledPlugins` entries such as `"design@synced": false`, plus either `disableClaudeAiConnectors: true` (no connector used) or `deniedMcpServers` entries by connector name. Settings stay local to you; nothing is written to the shared `.claude/settings.json`.
+- **`-Apply`:** backs up `settings.local.json` first, keeps everything already in it (including a plugin you set to `true`), and never removes entries. To turn something back on, edit the file.
+- **Limits:** it only sees past use, so pass `-Keep` for anything you expect to need. Plugins your organization requires aren't proposed. Connector names marked "(name inferred)" come from tool names; check them before applying. The change applies to the next session, or after `/reload-plugins`.
+
 ## Why a script and a skill
 
-The script does everything that's the same every time (copying, merging, `git init`) and uses no tokens. The skill does only what needs judgment, which is reading the code to fill in `CLAUDE.md`. See `Token-Usage-Recommendations.md` in aPePAS (R4) for the reasoning behind the CLAUDE.md layout.
+The script does everything that's the same every time (copying, merging, `git init`) and uses no tokens. The skill does only what needs judgment, which is reading the code to fill in `CLAUDE.md`. See `Claude_Docs/Planning_Token-Usage-Recommendations.md` in aPePAS for the reasoning: R4 for the CLAUDE.md layout, and R11 to R14 for the "File tools" and "Session habits" sections and the `Tools/` scripts.
 
 ## Editing the templates
 
